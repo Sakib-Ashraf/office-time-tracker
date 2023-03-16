@@ -1,25 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import TimeProcessor from './Components/Timer/TimeProcessor';
+import CommandInput from './Components/Command/CommandInput';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<div>
+			<TimeProcessor inputString='Mar 16, 2023 - Signing In at 4:12 PM (Bangladesh Time)' />
+
+			<CommandInput />
+		</div>
+	);
 }
 
 export default App;
