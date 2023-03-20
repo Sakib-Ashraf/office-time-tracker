@@ -1,24 +1,54 @@
+/* eslint-disable no-unused-vars */
 // @ts-nocheck
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+
+const CommandContext = createContext({});
+
+const CommandProvider = ({ children }) => {
+	const [command, setCommand] = useState('');
+	const [action, setAction] = useState('');
+
+	const handleCommandProcessed = (action) => {
+		setAction(action);
+	};
+
+	useEffect(() => {
+		localStorage.setItem('currentCommand', command);
+	}, [command, setCommand]);
+
+	return (
+		<CommandContext.Provider value={{ action, handleCommandProcessed, command, setCommand }}>
+            {children}
+			<CommandProcessor
+				commandString={command}
+				onCommandProcessed={handleCommandProcessed}
+			/>
+		</CommandContext.Provider>
+	);
+};
+
 
 const CommandProcessor = ({ commandString, onCommandProcessed }) => {
 	const [previousCommandString, setPreviousCommandString] = useState(null);
 
-    useEffect(() => {
+	useEffect(() => {
 		if (commandString) {
-			localStorage.setItem('currentCommand', commandString);
 			if (previousCommandString !== commandString) {
 				localStorage.setItem('previousCommand', previousCommandString);
 				setPreviousCommandString(commandString);
 			}
 		}
 	}, [commandString, previousCommandString]);
+
 	useEffect(() => {
 		const previousCommand = localStorage.getItem('previousCommand');
 		const currentCommand = localStorage.getItem('currentCommand');
 
 		if (currentCommand) {
-			if (currentCommand.toLowerCase().includes('signing in')) {
+			if (
+				currentCommand.toLowerCase().includes('signing in') ||
+				currentCommand.toLowerCase().includes('in')
+			) {
 				onCommandProcessed('Start');
 			} else if (
 				currentCommand.toLowerCase().includes('taking a break') ||
@@ -43,13 +73,16 @@ const CommandProcessor = ({ commandString, onCommandProcessed }) => {
 				currentCommand.toLowerCase().includes('back')
 			) {
 				onCommandProcessed('Resume');
-			} else if (currentCommand.toLowerCase().includes('signing out')) {
+			} else if (
+				currentCommand.toLowerCase().includes('signing out') ||
+				currentCommand.toLowerCase().includes('out')
+			) {
 				onCommandProcessed('End');
 			}
 		}
 	}, [onCommandProcessed, previousCommandString]);
 
-	return <div></div>;
+	return null;
 };
 
-export default CommandProcessor;
+export { CommandProvider, CommandContext };

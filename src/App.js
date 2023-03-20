@@ -1,14 +1,15 @@
 import React from 'react';
-import TimeProcessor from './Components/Timer/TimeProcessor';
-import CommandInput from './Components/Command/CommandInput';
+import Main from './Main.jsx';
+import { CommandProvider } from './Context/CommandContext/CommandContext.jsx';
+import { TimerProvider } from './Context/TimerContext/TimerContext.jsx';
 
 function App() {
 	return (
-		<div>
-			<TimeProcessor inputString='Mar 16, 2023 - Signing In at 4:12 PM (Bangladesh Time)' />
-
-			<CommandInput />
-		</div>
+			<CommandProvider>
+				<TimerProvider>
+					<Main/>
+				</TimerProvider>
+			</CommandProvider>
 	);
 }
 
