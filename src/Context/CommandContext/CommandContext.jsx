@@ -8,7 +8,7 @@ const CommandProvider = ({ children }) => {
 	const [command, setCommand] = useState('');
 	const [action, setAction] = useState('');
 
-	const handleCommandProcessed = (action) => {
+    const handleCommandProcessed = (action) => {
 		setAction(action);
 	};
 
@@ -29,57 +29,65 @@ const CommandProvider = ({ children }) => {
 
 
 const CommandProcessor = ({ commandString, onCommandProcessed }) => {
-	const [previousCommandString, setPreviousCommandString] = useState(null);
+	const [previousCommandString, setPreviousCommandString] = useState('');
 
 	useEffect(() => {
-		if (commandString) {
 			if (previousCommandString !== commandString) {
 				localStorage.setItem('previousCommand', previousCommandString);
 				setPreviousCommandString(commandString);
 			}
-		}
 	}, [commandString, previousCommandString]);
 
 	useEffect(() => {
 		const previousCommand = localStorage.getItem('previousCommand');
 		const currentCommand = localStorage.getItem('currentCommand');
 
-		if (currentCommand) {
-			if (
-				currentCommand.toLowerCase().includes('signing in') ||
-				currentCommand.toLowerCase().includes('in')
-			) {
+		switch (true) {
+			case currentCommand &&
+				currentCommand.toLowerCase().includes('signing in'):
 				onCommandProcessed('Start');
-			} else if (
-				currentCommand.toLowerCase().includes('taking a break') ||
-				currentCommand.toLowerCase().includes('taking break') ||
-				currentCommand.toLowerCase().includes('break')
-			) {
+				break;
+
+			case (currentCommand &&
+				currentCommand.toLowerCase().includes('taking a break')) ||
+				(currentCommand &&
+					currentCommand.toLowerCase().includes('taking break')) ||
+				(currentCommand &&
+					currentCommand.toLowerCase().includes('break')):
 				if (
-					previousCommand &&
-					(previousCommand.toLowerCase().includes('taking a break') ||
+					(previousCommand &&
 						previousCommand
 							.toLowerCase()
-							.includes('taking break') ||
-						previousCommand.toLowerCase().includes('break'))
+							.includes('taking a break')) ||
+					previousCommand.toLowerCase().includes('taking break') ||
+					previousCommand.toLowerCase().includes('break')
 				) {
 					onCommandProcessed('Resume');
 				} else {
 					onCommandProcessed('Pause');
 				}
-			} else if (
-				currentCommand.toLowerCase().includes('back from break') ||
-				currentCommand.toLowerCase().includes('returned') ||
-				currentCommand.toLowerCase().includes('back')
-			) {
+				break;
+
+			case (currentCommand &&
+				currentCommand.toLowerCase().includes('back from break')) ||
+				(currentCommand &&
+					currentCommand.toLowerCase().includes('returned')) ||
+				(currentCommand &&
+					currentCommand.toLowerCase().includes('back')):
 				onCommandProcessed('Resume');
-			} else if (
-				currentCommand.toLowerCase().includes('signing out') ||
-				currentCommand.toLowerCase().includes('out')
-			) {
+				break;
+
+			case (currentCommand &&
+				currentCommand.toLowerCase().includes('signing out')) ||
+				(currentCommand &&
+					currentCommand.toLowerCase().includes('out')):
 				onCommandProcessed('End');
-			}
+				break;
+
+			default:
+				break;
 		}
+
 	}, [onCommandProcessed, previousCommandString]);
 
 	return null;

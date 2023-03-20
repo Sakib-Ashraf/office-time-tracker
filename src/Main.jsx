@@ -5,7 +5,7 @@ import { CommandContext } from './Context/CommandContext/CommandContext';
 import { TimerContext } from './Context/TimerContext/TimerContext';
 
 function Main() {
-  const { action, command, setCommand } = useContext(CommandContext);
+  const { action, setCommand } = useContext(CommandContext);
   const {
     TimeProcessor,
 		date,
@@ -26,8 +26,8 @@ function Main() {
 
   useEffect(() => {
     handleCommand(action);
-    TimeProcessor(command);
-  }, [command]);
+    TimeProcessor(action);
+  }, [action]);
 
   const handleHalfTime = (e) => {
     let time = e.target.value * 60 * 60 * 1000;
@@ -52,7 +52,7 @@ function Main() {
 				value={commandInput}
 				onChange={commandOnChangeHandler}
 			/>
-			<button onClick={() => handleCommandSubmit()}>Submit</button>
+			<button type="submit" onClick={() => handleCommandSubmit()}>Submit</button>
 			<br />
 			<label htmlFor='halftime'>Halftime Value (in hrs): </label>
 			<input
@@ -72,12 +72,12 @@ function Main() {
 			<div>
 				<div>Time: {Math.floor(elapsedTime / 1000)} seconds</div>
 				<div>
-					<button onClick={() => handleStart(Date.now())}>
+					<button type="button" onClick={() => handleStart(Date.now())}>
 						Start
 					</button>
-					<button onClick={() => handlePause()}>Pause</button>
-					<button onClick={() => handleResume()}>Resume</button>
-					<button onClick={() => handleEnd()}>End</button>
+					<button type="button" onClick={() => handlePause()}>Pause</button>
+					<button type="button" onClick={() => handleResume()}>Resume</button>
+					<button type="button" onClick={() => handleEnd()}>End</button>
 				</div>
 			</div>
 		</>

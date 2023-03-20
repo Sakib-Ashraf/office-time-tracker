@@ -22,7 +22,7 @@ const TimerProvider = ({ children }) => {
 		const timeRegex = /(\d{1,2}):(\d{2}) (AM|PM)/i; // regular expression to match time in the format hh:mm AM/PM
 
 		const dateRegex =
-			/\b\d{1,2}[\/-]\d{1,2}([\/-]\d{2}(\d{2})?)?|(\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{1,2},?\s\d{4}?)\b/; // regular expression to match date in the format 26/03/2023 or MMM DD, YYYY or 26-03-2023 or 26/03 or Mar 26, 2023
+			/\b\d{1,2}[\/-]\d{1,2}([\/-]\d{2}(\d{2})?)?|(\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{1,2},?\s\d{4}?)\b/; // regular expression to match date in the format DD/MM/YYYY or MMM DD, YYYY or DD-MM-YYYY or DD/MM 
 
 		const timezoneRegex = /\((\w+[\s\w+]*)\)/i; // regular expression to match timezone in the format (timezone)
 
@@ -99,16 +99,25 @@ const TimerProvider = ({ children }) => {
 	};
 
     const handleCommand = (command) => {
-		if (command === 'Start') {
-			handleStart(Date.now());
-		} else if (command === 'Pause') {
-			handlePause();
-		} else if (command === 'Resume') {
-			handleResume();
-		} else if (command === 'End') {
-			handleEnd();
+		switch (command) {
+			case 'Start':
+				handleStart(Date.now());
+				break;
+			case 'Pause':
+				handlePause();
+				break;
+			case 'Resume':
+				handleResume();
+				break;
+			case 'End':
+				handleEnd();
+				break;
+			default:
+				// handle default case here
+				break;
 		}
 	};
+
 
 	const startTimer = (startTime = Date.now()) => {
 		clearInterval(timerInterval);
