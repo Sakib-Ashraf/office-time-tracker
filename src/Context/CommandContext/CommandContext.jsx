@@ -17,7 +17,7 @@ const CommandProvider = ({ children }) => {
 	}, [command, setCommand]);
 
 	return (
-		<CommandContext.Provider value={{ action, handleCommandProcessed, command, setCommand }}>
+		<CommandContext.Provider value={{ action, handleCommandProcessed, setCommand }}>
             {children}
 			<CommandProcessor
 				commandString={command}
@@ -85,6 +85,7 @@ const CommandProcessor = ({ commandString, onCommandProcessed }) => {
 				break;
 
 			default:
+				onCommandProcessed('');
 				break;
 		}
 

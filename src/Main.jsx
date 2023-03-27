@@ -41,7 +41,18 @@ function Main() {
   const commandOnChangeHandler = (e) => {
     setCommandInput(e.target.value);
   };
-  
+const secondsToHms = (d) => {
+	d = Number(d);
+	var h = Math.floor(d / 3600);
+	var m = Math.floor((d % 3600) / 60);
+	var s = Math.floor((d % 3600) % 60);
+
+	var hDisplay = h > 0 ? h + (h === 1 ? ' hour, ' : ' hours, ') : '';
+	var mDisplay = m > 0 ? m + (m === 1 ? ' minute, ' : ' minutes, ') : '';
+	var sDisplay = s > 0 ? s + (s === 1 ? ' second' : ' seconds') : '';
+	return hDisplay + mDisplay + sDisplay;
+};
+
   return (
 		<>
 			<h1>Office Time Tracker</h1>
@@ -52,7 +63,9 @@ function Main() {
 				value={commandInput}
 				onChange={commandOnChangeHandler}
 			/>
-			<button type="submit" onClick={() => handleCommandSubmit()}>Submit</button>
+			<button type='submit' onClick={() => handleCommandSubmit()}>
+				Submit
+			</button>
 			<br />
 			<label htmlFor='halftime'>Halftime Value (in hrs): </label>
 			<input
@@ -70,14 +83,23 @@ function Main() {
 				<p>Timezone: {timezone}</p>
 			</div>
 			<div>
-				<div>Time: {Math.floor(elapsedTime / 1000)} seconds</div>
+				<div>Time: {secondsToHms((elapsedTime / 1000))} </div>
 				<div>
-					<button type="button" onClick={() => handleStart(Date.now())}>
+					<button
+						type='button'
+						onClick={() => handleStart(Date.now())}
+					>
 						Start
 					</button>
-					<button type="button" onClick={() => handlePause()}>Pause</button>
-					<button type="button" onClick={() => handleResume()}>Resume</button>
-					<button type="button" onClick={() => handleEnd()}>End</button>
+					<button type='button' onClick={() => handlePause()}>
+						Pause
+					</button>
+					<button type='button' onClick={() => handleResume()}>
+						Resume
+					</button>
+					<button type='button' onClick={() => handleEnd()}>
+						End
+					</button>
 				</div>
 			</div>
 		</>
