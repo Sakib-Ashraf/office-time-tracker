@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // @ts-nocheck
-import React, {useContext, useEffect, useState} from 'react';
-import { CommandContext } from './Context/CommandContext/CommandContext';
-import { TimerContext } from './Context/TimerContext/TimerContext';
+import React, {useContext, useEffect} from 'react';
+import { CommandContext } from '../Context/CommandContext/CommandContext';
+import { TimerContext } from '../Context/TimerContext/TimerContext';
+import CommandInput from "../Components/CommandInterface/CommandInput";
 
 function Main() {
-  const { action, setCommand } = useContext(CommandContext);
+  const { action, command, setCommand } = useContext(CommandContext);
   const {
-    TimeProcessor,
+		TimeProcessor,
 		date,
 		time,
 		timezone,
@@ -20,27 +21,22 @@ function Main() {
 		handleResume,
 		handleEnd,
 		elapsedTime,
+		FormatElapsedTime,
   } = useContext(TimerContext);
 
-  const [commandInput, setCommandInput] = useState('');
-
   useEffect(() => {
-    handleCommand(action);
-    TimeProcessor(action);
-  }, [action]);
+		const { date, time, timezone, period } = TimeProcessor(command);
+		let startTime = `${date} ${time} ${period} ${timezone}`;
+		FormatElapsedTime(startTime);
+		handleCommand(action);
+  }, [action, setCommand]);
 
   const handleHalfTime = (e) => {
     let time = e.target.value * 60 * 60 * 1000;
     setHalftime(time);
   };
 
-  const handleCommandSubmit = () => {
-    setCommand(commandInput);
-  };
-  
-  const commandOnChangeHandler = (e) => {
-    setCommandInput(e.target.value);
-  };
+
 const secondsToHms = (d) => {
 	d = Number(d);
 	var h = Math.floor(d / 3600);
@@ -56,16 +52,7 @@ const secondsToHms = (d) => {
   return (
 		<>
 			<h1>Office Time Tracker</h1>
-			<label htmlFor='command_input'>Command Input: </label>
-			<input
-				type='text'
-				id='command_input'
-				value={commandInput}
-				onChange={commandOnChangeHandler}
-			/>
-			<button type='submit' onClick={() => handleCommandSubmit()}>
-				Submit
-			</button>
+			<CommandInput />
 			<br />
 			<label htmlFor='halftime'>Halftime Value (in hrs): </label>
 			<input

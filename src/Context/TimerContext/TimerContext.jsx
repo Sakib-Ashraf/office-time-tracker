@@ -91,17 +91,17 @@ const TimerProvider = ({ children }) => {
 			time = `${hours}:${minutes}`;
 		}
 
-            setTime(time);
-			setDate(date);
-			setTimezone(timezone);
-        setPeriod(period);
+		setTime(time);
+		setDate(date);
+		setTimezone(timezone);
+		setPeriod(period);
         return { date, time, timezone, period };
 	};
 
-    const handleCommand = (command) => {
+    const handleCommand = (command, startTime) => {
 		switch (command) {
 			case 'Start':
-				handleStart(Date.now());
+				handleStart(startTime);
 				break;
 			case 'Pause':
 				handlePause();
@@ -116,6 +116,7 @@ const TimerProvider = ({ children }) => {
 				// handle default case here
 				break;
 		}
+		return command;
 	};
 
 
@@ -146,7 +147,7 @@ const TimerProvider = ({ children }) => {
 	};
 
 	const handleStart = (startTime) => {
-        console.log('start');
+        console.log('start', startTime);
 		startTimer(startTime);
 	};
 
@@ -178,6 +179,74 @@ const TimerProvider = ({ children }) => {
 		}
 	}, [elapsedTime, halftime, lastHalfTime, doubleHalfTime, endNotificationSent]);
 
+	const FormatElapsedTime = (StartTime) => {
+		// Set a specific date and time (in this case, March 10, 2022 at 12:00am)
+		const specificTime = new Date('Thu Mar 10 2022 00:00:00 GMT-0800');
+
+		// Get the current time
+		const now = new Date();
+
+		// Get the elapsed time in milliseconds
+		const elapsed = now.getTime() - specificTime.getTime();
+
+		// Convert milliseconds to seconds, minutes, hours, days, and weeks
+		const seconds = Math.floor(elapsed / 1000);
+		const minutes = Math.floor(seconds / 60);
+		const hours = Math.floor(minutes / 60);
+		const days = Math.floor(hours / 24);
+		const weeks = Math.floor(days / 7);
+		const months = Math.floor(weeks / 4.34812);
+		const years = Math.floor(months / 12);
+
+		// Calculate the remaining weeks, days, hours, minutes, and seconds
+		const remainingMonths = months % 12;
+		const remainingWeeks = weeks % 4;
+		const remainingDays = days % 7;
+		const remainingHours = hours % 24;
+		const remainingMinutes = minutes % 60;
+		const remainingSeconds = seconds % 60;
+
+		// Build the elapsed time string
+		let elapsedTimeString = '';
+		if (years > 0) {
+			elapsedTimeString += `${years} year${years > 1 ? 's' : ''} `;
+		}
+		if (remainingMonths > 0) {
+			elapsedTimeString += `${remainingMonths} month${
+				remainingMonths > 1 ? 's' : ''
+			} `;
+		}
+		if (remainingWeeks > 0) {
+			elapsedTimeString += `${remainingWeeks} week${
+				remainingWeeks > 1 ? 's' : ''
+			} `;
+		}
+		if (remainingDays > 0) {
+			elapsedTimeString += `${remainingDays} day${
+				remainingDays > 1 ? 's' : ''
+			} `;
+		}
+		if (remainingHours > 0) {
+			elapsedTimeString += `${remainingHours} hour${
+				remainingHours > 1 ? 's' : ''
+			} `;
+		}
+		if (remainingMinutes > 0) {
+			elapsedTimeString += `${remainingMinutes} minute${
+				remainingMinutes > 1 ? 's' : ''
+			} `;
+		}
+		if (remainingSeconds > 0) {
+			elapsedTimeString += `${remainingSeconds} second${
+				remainingSeconds > 1 ? 's' : ''
+			} `;
+		}
+
+		// Output the elapsed time string
+		console.log(`Elapsed time: ${elapsedTimeString}`);
+	};
+
+
 	return (
 		<TimerContext.Provider
             value={{
@@ -188,6 +257,7 @@ const TimerProvider = ({ children }) => {
 				setDoubleHalfTime,
 				endNotificationSent,
 				setEndNotificationSent,
+				FormatElapsedTime,
 				halftime,
 				setHalftime,
 				time,

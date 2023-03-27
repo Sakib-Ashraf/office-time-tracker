@@ -1,5 +1,5 @@
 import React from 'react';
-import Main from './Main.jsx';
+import Main from './Container/Main.jsx';
 import { CommandProvider } from './Context/CommandContext/CommandContext.jsx';
 import { TimerProvider } from './Context/TimerContext/TimerContext.jsx';
 

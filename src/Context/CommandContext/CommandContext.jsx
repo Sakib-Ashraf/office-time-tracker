@@ -17,7 +17,7 @@ const CommandProvider = ({ children }) => {
 	}, [command, setCommand]);
 
 	return (
-		<CommandContext.Provider value={{ action, handleCommandProcessed, setCommand }}>
+		<CommandContext.Provider value={{ action, handleCommandProcessed, command, setCommand }}>
             {children}
 			<CommandProcessor
 				commandString={command}
