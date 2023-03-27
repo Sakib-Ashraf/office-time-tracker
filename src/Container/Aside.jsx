@@ -2,7 +2,7 @@ import React from 'react';
 
 function Aside({children}) {
   return (
-    <aside>{children}</aside>
+    <aside className="aside">{children}</aside>
   )
 }
 
