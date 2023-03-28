@@ -9,14 +9,14 @@ import Header from '../Components/Common/Header';
 
 const Main = () => {
   return (
-	  <main className='main'>
-		  <Aside>	  
-		  	<Status />
-		  </Aside>
-		  <Body>
-			  <Header />
-			 <CommandInput /> 
-		  </Body>	
+		<main className='flex h-screen bg-gray-100 w-full'>
+			<Aside>
+				<Status />
+			</Aside>
+			<Body>
+				<Header />
+				<CommandInput />
+			</Body>
 		</main>
   );
 }
